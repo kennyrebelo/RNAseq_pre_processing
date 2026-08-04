@@ -1,0 +1,48 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - sysroot_linux-64=2.17
+  - bedtools
+  - meme
+  - samtools
+  - star
+  - salmon=2.3.4
+  - fastqc
+  - umi_tools
+  - trim-galore=0.6.7
+  - bamtools
+  - deeptools
+  - mamba
+  - sra-tools
+  - multiqc
+  - bowtie
+  - demultiplexer
+  - ea-utils
+  - ca-certificates
+  - certifi
+  - openssl
+  - perl-xml-libxml
+  - upsetplot
+  - pybedtools
+  - intervene
+  - stringtie
+  - rmats
+  - gffutils
+  - bioconda::ucsc-bigbedtobed
+  - bioconda::pairix
+  - bioconda::entrez-direct
+  - bioconda::blast
+  - conda-forge::scikit-learn
+  - conda-forge::intervaltree
+  - logomaker
+  - flynn::ncftp
+  - bioconda::fastq-screen
+  - bioconda::gtfparse
+  - seqtk
+  # --- bigwig / genome-browser branch ---
+  - bioconda::rseqc          # provides infer_experiment.py
+  - bioconda::pysam          # strand splitting
+  - bioconda::ucsc-bedgraphtobigwig   # fallback if the configured binary is unavailable
+

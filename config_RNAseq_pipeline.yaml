@@ -1,0 +1,170 @@
+# ============================================================
+# RNA-seq pipeline configuration
+# ============================================================
+
+# Reference annotation/index directories, keyed by species.
+# Species is now specified per-sample in samples.tsv (see the "species"
+# column). Every value used there must have a matching entry here.
+references:
+  human:
+    star_genome_dir: "/home/blencowe/blencowe4/krebelo/STAR_genome_indexes/Human/GRCh38p12_STAR_2.7.10a"
+    salmon_index_dir: "/home/blencowe/blencowe4/krebelo/salmon_index/Salmon_v2.3.4_GRCh38.p12_v41"
+    # Used by the bigwig branch only
+    transcripts_bed: "/home/blencowe/blencowe4/krebelo/tables_repository/Transcripts_gencode_v41_comprehensive.bed"
+    chrom_sizes: "/home/blencowe/blencowe4/krebelo/downloads/datasets/2022_10_04_CLIP_DSC/makeBW/hg38.chrom.sizes"
+    genome_build: "hg38"
+    # Reference annotation, used by the StringTie/rMATS splicing branch
+    gtf: "/home/blencowe/blencowe4/resources/reference-genomes/Homo_sapiens/GRCh38p12/Annotation/gencode.v41.annotation.gtf"
+  mouse:
+    star_genome_dir: "/home/blencowe/blencowe4/krebelo/STAR_genome_indexes/Mouse/GCvM37/STAR_2.7.10a"
+    salmon_index_dir: "/home/blencowe/blencowe4/krebelo/salmon_index/Mouse/GCvM37/Salmon_v2.3.4"
+    # Used by the bigwig branch only
+    transcripts_bed: "/home/blencowe/blencowe4/krebelo/tables_repository/Transcripts_gencode_VM37_comprehensive.bed"
+    chrom_sizes: "/home/blencowe/blencowe4/krebelo/downloads/datasets/iCLIP_Yolanda_Nujhat_project/genome_browser/mm39-used.chrom.sizes"
+    genome_build: "mm39"
+    # Reference annotation, used by the StringTie/rMATS splicing branch
+    gtf: "/home/blencowe/blencowe4/krebelo/salmon_index/Mouse/GCvM37/gencode.vM37.annotation.gtf"
+
+# Sample sheet (TSV). Required columns:
+#   sample_name       - name used for this sample throughout the pipeline
+#   species           - "human" or "mouse"; must match a key under `references` above
+#   read_pair1        - filename of read 1, OR an SRA accession (e.g. SRR1539524)
+#   read_pair2        - filename of read 2 (leave blank for single-end / SRA)
+#   raw_data_dir      - directory containing the raw fastqs for this sample.
+#                        Only needed for local (non-SRA) samples; leave blank
+#                        for SRA samples, which download into pre_processing_dir instead
+#   pre_processing_dir - directory under which trimming/QC/alignment/quant
+#                        subfolders will be created for this sample
+#   generate_bw       - "yes" or "no"; when yes, the bigwig / genome-browser
+#                        branch runs for this sample
+samples_tsv: "samples.tsv"
+
+# Conda environment used by every rule in the pipeline (can call a .yaml environment or already created conda environment)
+conda_env: "environment_RNAseq.yaml"
+
+# Resource allocations per pipeline stage
+resources:
+  trimming:
+    threads: 8
+    mem_mb: 10000
+  alignment:
+    threads: 20
+    mem_mb: 40000
+  sorting:
+    threads: 8
+    mem_mb: 10000
+  bigwig:
+    threads: 4
+    mem_mb: 16000
+
+# ============================================================
+# BigWig / genome-browser settings (only used for samples with
+# generate_bw = yes in samples.tsv)
+# ============================================================
+bigwig:
+  # Path to the UCSC bedGraphToBigWig binary
+  bedgraph_to_bigwig: "/home/blencowe/blencowe4/krebelo/downloads/datasets/2022_10_04_CLIP_DSC/makeBW/bedGraphToBigWig"
+
+  # Email written into the UCSC track hub's hub.txt
+  hub_email: "kennyrebelo@mail.utoronto.ca"
+
+  # Coverage normalisation: scaled_value = raw_coverage * scale_factor / mapped_reads
+  # 1e8 reproduces the "RP10_8" scaling used in makeBW.py
+  scale_factor: 100000000
+  scale_suffix: "RP10_8"
+
+  # A library is called strand-specific when the larger of the two
+  # "Fraction of reads explained by ..." values reported by RSeQC's
+  # infer_experiment.py is >= this threshold.
+  strand_threshold: 0.75
+
+# ============================================================
+# Differential gene expression (DESeq2, from the Salmon quantifications)
+# ============================================================
+dge:
+  # Master switch. When false the DGE rules are not added to the DAG at all.
+  # experimental_design.tsv is read when EITHER dge.enabled or
+  # splicing.enabled is true, and is not required when both are false.
+  enabled: true
+
+  # Sample -> group assignments and the contrasts to test.
+  # Columns: sample_name, group, contrast_A, contrast_B
+  #   sample_name  must match a sample_name in samples.tsv
+  #   group        the condition this replicate belongs to (e.g. nt, kd_c)
+  #   contrast_A   reference / baseline group  \  one filled-in pair per row;
+  #   contrast_B   treatment group             /  leave blank on other rows
+  # log2FoldChange is reported as contrast_B relative to contrast_A.
+  experimental_design: "experimental_design.tsv"
+
+  # Where the result tables and PCA plots are written
+  output_dir: "DGE"
+
+  # DESeq2 needs a large R/Bioconductor stack, so it gets its own environment
+  # rather than being folded into environment_RNAseq.yaml.
+  conda_env: "environment_DESeq2.yaml"
+
+  # Passed to tximport()
+  counts_from_abundance: "lengthScaledTPM"
+
+  threads: 4
+  mem_mb: 16000
+
+# ============================================================
+# Splicing quantification and novel-isoform annotation
+# (StringTie assembly/merge + rMATS), from the STAR alignments
+# ============================================================
+splicing:
+  # Master switch. When false none of the splicing rules enter the DAG.
+  enabled: true
+
+  # Shares experimental_design.tsv with the dge block above. Samples taking
+  # part are those whose group appears in a contrast_A / contrast_B pair; a
+  # sample listed in the design but not used in any contrast is excluded.
+  experimental_design: "experimental_design.tsv"
+
+  # Root for all splicing outputs
+  output_dir: "splicing"
+
+  # StringTie and rMATS get their own environment, separate from both the main
+  # pipeline environment and the DESeq2 one.
+  conda_env: "environment_rMATS.yaml"
+
+  # --- StringTie ---
+  # -j : minimum junction coverage for a junction to be reported during
+  #      per-sample assembly
+  stringtie_min_junction_coverage: 2
+  stringtie:
+    threads: 4
+    mem_mb: 5000
+  stringtie_merge:
+    threads: 24
+    mem_mb: 20000
+
+  # --- rMATS ---
+  # --anchorLength : a minimum number of "anchor length" nucleotides must be
+  #                  mapped to each end of a given splice junction.
+  anchor_length: 4
+  # --cstat : cutoff on the splicing difference used by the likelihood-ratio
+  #           test, expressed as a proportion (0.01 = 1% PSI difference)
+  cstat: 0.01
+  rmats_prep:
+    threads: 20
+    mem_mb: 10000
+  rmats_post:
+    threads: 4
+    mem_mb: 10000
+
+  # A library is called strand-specific when the larger of the two
+  # "Fraction of reads explained by ..." values from RSeQC's
+  # infer_experiment.py reaches this threshold; below it the run is treated as
+  # fr-unstranded. See the infer_strandedness checkpoint in the Snakefile for
+  # how the two fractions map onto fr-firststrand / fr-secondstrand.
+  strand_threshold: 0.75
+
+  # --- significance filter applied to SE.MATS.JC.txt ---
+  # An event is kept when every replicate in both samples has at least
+  # min_reads supporting reads (mean of inclusion and skipping counts), the
+  # FDR is below `fdr`, and |delta PSI| is at least min_delta_psi.
+  min_reads: 2
+  fdr: 0.05
+  min_delta_psi: 0.1

@@ -1,0 +1,35 @@
+# Environment for the DESeq2 differential-expression rule only.
+#
+# Kept separate from environment_RNAseq.yaml deliberately: the R/Bioconductor
+# stack is large and pulling it into the main environment would force the
+# solver to re-resolve the whole alignment/quantification toolchain every time
+# something here changes.
+#
+# sysroot_linux-64=2.17 pins the glibc baseline so the solver only picks
+# builds that run on the cluster's compute nodes (glibc 2.28).
+#
+# CHANNELS: `nodefaults` is required, not cosmetic. Channels listed here are
+# MERGED with those in ~/.condarc rather than replacing them, so simply
+# omitting `defaults` still lets pkgs/main and pkgs/r into the solve. pkgs/r
+# carries very old Bioconductor builds, and the solver will happily take one
+# package from there and the rest from bioconda -- which is how a current
+# DESeq2 ended up beside MatrixGenerics 1.6.0 (four releases too old), giving:
+#     object 'colMeans' is not exported by 'namespace:MatrixGenerics'
+#
+# VERSIONS: only r-base is pinned. Bioconda builds every R package against a
+# specific R version and tags the build string accordingly (r44_*), so pinning
+# R to 4.4 constrains the entire Bioconductor stack to one coherent generation
+# (3.19/3.20) without naming each package version -- which matters because
+# exact version pins are only satisfiable if that precise build exists for
+# linux-64 in these channels.
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - sysroot_linux-64=2.17
+  - r-base=4.4
+  - bioconductor-deseq2
+  - bioconductor-tximport
+  - r-ggplot2
+  - r-readr

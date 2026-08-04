@@ -1,0 +1,27 @@
+# Environment for the StringTie + rMATS splicing branch only.
+#
+# Separate from environment_RNAseq.yaml and environment_DESeq2.yaml so that a
+# change here does not force the alignment/quantification toolchain or the
+# Bioconductor stack to be re-solved.
+#
+# sysroot_linux-64=2.17 pins the glibc baseline so the solver only picks builds
+# that run on the cluster's compute nodes (glibc 2.28).
+#
+# `nodefaults` is required, not cosmetic: channels listed in an environment
+# file are MERGED with those in ~/.condarc rather than replacing them, so
+# omitting `defaults` is not enough to keep pkgs/main and pkgs/r out of the
+# solve. Those channels carry stale builds and the solver will mix them in.
+#
+# StringTie is pinned to 2.2.1 as specified. rMATS is left at 4.3.0, which is
+# the version whose SE.MATS.JC.txt column layout the downstream filter script
+# assumes.
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - sysroot_linux-64=2.17
+  - python=3.10
+  - stringtie=2.2.1
+  - rmats=4.3.0
+  - samtools
