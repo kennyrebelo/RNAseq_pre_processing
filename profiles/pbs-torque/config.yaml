@@ -1,0 +1,77 @@
+# ===========================================================================
+# Snakemake profile for PBS / Torque
+#
+# Install to ~/.config/snakemake/<name>/ and select with
+#   snakemake --profile <name>
+#
+# Nothing here is pipeline-specific except the set-resources block at the
+# bottom, which names rules.
+# ===========================================================================
+
+# --- how jobs reach the scheduler ---
+# pbs-submit.py builds the qsub command; mem and walltime come from each
+# rule's resources. CPU count is NOT passed here -- pbs-submit.py derives
+# nodes=1:ppn=<threads> itself, and specifying both produces conflicting
+# resource requests that PBS rejects with "Illegal attribute or resource value".
+cluster: "pbs-submit.py --depend \"{dependencies}\" -l mem={resources.mem_mb}mb,walltime={resources.runtime} "
+cluster-status: "pbs-status.py"
+jobscript: "pbs-jobscript.sh"
+
+# Maximum concurrent cluster jobs
+jobs: 30
+
+# Cores available to the master process for local rules
+local-cores: 20
+
+# --- robustness on a shared filesystem ---
+# A job's output is written on a compute node and has to become visible to
+# the master process. On a busy NFS mount the default 5 s is not enough and
+# Snakemake reports "completed successfully, but some output files are
+# missing" for jobs that in fact worked.
+latency-wait: 120
+
+# Retry a failed job before giving up. With 0, a single transient failure
+# takes down a run that may be most of the way through.
+retries: 2
+
+keep-going: true
+rerun-incomplete: true
+immediate-submit: false
+notemp: false
+verbose: true
+
+# --- conda ---
+use-conda: true
+conda-frontend: mamba
+
+# Optional: build the tool environments once and share them across project
+# directories. Without this, Snakemake hashes the environment path into the
+# env identity, so every new project directory rebuilds all of them.
+# conda-prefix: /path/to/shared/snakemake_envs
+
+# One scheduler script per rule instance, named for readability
+jobname: "{rule}.{jobid}.skmlog"
+
+# --- default resources ---
+# Applied to any rule that does not set them. runtime is in seconds.
+default-resources:
+    - mem_mb=5000
+    - runtime=86400
+    - threads=1
+    - disk_mb=1000
+
+# --- per-rule resources ---
+# mem_mb, threads and runtime are set per-rule in the pipeline's own
+# config_RNAseq_pipeline.yaml and are authoritative there -- setting them
+# again here would let the two drift apart. Only disk_mb is set here,
+# because the pipeline does not specify it and it is a scheduler concern.
+set-resources:
+    - trim_galore_se:disk_mb=10000
+    - trim_galore_pe:disk_mb=10000
+    - star_align:disk_mb=20000
+    - salmon_quant:disk_mb=20000
+    - filter_sort_index:disk_mb=10000
+    - stringtie_assemble:disk_mb=10000
+    - stringtie_merge:disk_mb=20000
+    - rmats_prep:disk_mb=20000
+    - rmats_post:disk_mb=20000
