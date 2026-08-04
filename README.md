@@ -173,7 +173,7 @@ flips every junction's strand assignment.
 
 **Checkpoints where output is unknown ahead of time.** SRA downloads may
 produce one or two FASTQs, and strandedness is only known after alignment. Both
-are Snakemake `checkpoint`s, so the DAG is re-evaluated once they complete.
+are Snakemake `checkpoints`, so the DAG is re-evaluated once they complete.
 
 **Failure is loud.** Every rule writes a `log:`, which survives job failure even
 though Snakemake deletes failed outputs. Sample sheet and design file problems
