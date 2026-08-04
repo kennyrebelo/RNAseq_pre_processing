@@ -46,8 +46,8 @@ requires one species — see [Configuration](docs/CONFIGURATION.md)).
 
 ```bash
 # 1. clone
-git clone https://github.com/kennyrebelo/RNAseq_pre_processing.git
-cd RNAseq_pre_processing
+git clone https://github.com/<user>/<repo>.git
+cd <repo>
 
 # 2. environment holding Snakemake itself
 conda create -n snakemake -c conda-forge -c bioconda snakemake mamba
@@ -55,13 +55,26 @@ conda activate snakemake
 
 # 3. describe your data
 #    edit samples.tsv, experimental_design.tsv, config_RNAseq_pipeline.yaml
+#    (the versions shipped here are annotated templates with
+#     /path/to/... placeholders and one example of every input type)
 
-# 4. check the plan without running anything
-snakemake --profile <your-profile> --use-conda -n
+# 4. install the cluster profile, if running on PBS/Torque
+cp -r profiles/pbs-torque ~/.config/snakemake/
+chmod +x ~/.config/snakemake/pbs-torque/{pbs-submit.py,pbs-status.py,pbs-jobscript.sh}
+#    then edit the conda path at the top of pbs-jobscript.sh -- see
+#    profiles/pbs-torque/README.md
 
-# 5. run
-snakemake --profile <your-profile> --use-conda
+# 5. check the plan without running anything
+snakemake --profile pbs-torque --use-conda -n
+
+# 6. run
+snakemake --profile pbs-torque --use-conda
 ```
+
+Not on PBS? Drop `--profile` and give `--cores` instead — the workflow itself
+contains no scheduler-specific code. See
+[profiles/pbs-torque/README.md](profiles/pbs-torque/README.md) for adapting to
+SLURM, SGE or LSF.
 
 The three tool environments (`environment_RNAseq.yaml`,
 `environment_DESeq2.yaml`, `environment_rMATS.yaml`) are built automatically by
@@ -93,6 +106,14 @@ The `rules/` and `scripts/` directory names are referenced by `Snakefile` and
 │   ├── dge.smk                        # DESeq2
 │   └── splicing.smk                   # StringTie + rMATS
 │
+├── profiles/
+│   └── pbs-torque/                    # example PBS/Torque profile
+│       ├── config.yaml                # cluster command, job limits, resources
+│       ├── pbs-submit.py              # builds and issues qsub
+│       ├── pbs-status.py              # reports job state to Snakemake
+│       ├── pbs-jobscript.sh           # per-job wrapper  ← must be edited
+│       └── README.md
+│
 ├── scripts/
 │   ├── split_strands.py
 │   ├── make_bigwig.py
@@ -111,6 +132,15 @@ The `rules/` and `scripts/` directory names are referenced by `Snakefile` and
     ├── TROUBLESHOOTING.md
     └── images/pipeline_rulegraph.svg
 ```
+
+`samples.tsv`, `experimental_design.tsv` and `config_RNAseq_pipeline.yaml` ship
+as annotated templates: every path is a `/path/to/...` placeholder, and the
+sample sheet includes one row of each input type (paired-end, single-end, SRA
+accession, and a second species) with `generate_bw` set both ways.
+
+`profiles/` is only needed on a cluster. It is copied to
+`~/.config/snakemake/` rather than used in place, since that is where Snakemake
+looks up a profile by name.
 
 Generated at runtime (not tracked in git):
 

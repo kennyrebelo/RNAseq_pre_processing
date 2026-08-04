@@ -1,13 +1,10 @@
 sample_name	group	contrast_A	contrast_B
-total_nt_rep1	nt	nt	kd_c
-total_nt_rep2	nt	Control	KD_C
-total_nt_rep3	nt		
-total_kd_c_rep1	kd_c		
-total_kd_c_rep2	kd_c		
-total_kd_c_rep3	kd_c		
-Control_rep1	Control		
-Control_rep2	Control		
-Control_rep3	Control		
-KD_C_rep1	KD_C		
-KD_C_rep2	KD_C		
-KD_C_rep3	KD_C		
+control_rep1	control	control	treated
+control_rep2	control	treated	rescue
+control_rep3	control		
+treated_rep1	treated		
+treated_rep2	treated		
+treated_rep3	treated		
+rescue_rep1	rescue		
+rescue_rep2	rescue		
+rescue_rep3	rescue		

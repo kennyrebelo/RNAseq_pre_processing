@@ -1,13 +1,13 @@
 sample_name	species	read_pair1	read_pair2	raw_data_dir	pre_processing_dir	generate_bw
-total_nt_rep1	human	RNAseq_total_NT_minus_SMG1i_rep1_R1.fastq.gz	RNAseq_total_NT_minus_SMG1i_rep1_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/test_data/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-total_nt_rep2	human	RNAseq_total_NT_minus_SMG1i_rep2_R1.fastq.gz	RNAseq_total_NT_minus_SMG1i_rep2_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/test_data/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-total_nt_rep3	human	RNAseq_total_NT_minus_SMG1i_rep3_R1.fastq.gz	RNAseq_total_NT_minus_SMG1i_rep3_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/test_data/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-total_kd_c_rep1	human	RNAseq_total_KD_C_minus_SMG1i_rep1_R1.fastq.gz	RNAseq_total_KD_C_minus_SMG1i_rep1_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/test_data/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-total_kd_c_rep2	human	RNAseq_total_KD_C_minus_SMG1i_rep2_R1.fastq.gz	RNAseq_total_KD_C_minus_SMG1i_rep2_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/test_data/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-total_kd_c_rep3	human	RNAseq_total_KD_C_minus_SMG1i_rep3_R1.fastq.gz	RNAseq_total_KD_C_minus_SMG1i_rep3_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/test_data/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-Control_rep1	human	RNAseq_WT_NT_rep1_R1.fastq.gz	RNAseq_WT_NT_rep1_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/GEO_submissions/40S_project_Kenny/RNAseq/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-Control_rep2	human	RNAseq_WT_NT_rep2_R1.fastq.gz	RNAseq_WT_NT_rep2_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/GEO_submissions/40S_project_Kenny/RNAseq/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-Control_rep3	human	RNAseq_WT_NT_rep3_R1.fastq.gz	RNAseq_WT_NT_rep3_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/GEO_submissions/40S_project_Kenny/RNAseq/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-KD_C_rep1	human	RNAseq_WT_KD_rep1_R1.fastq.gz	RNAseq_WT_KD_rep1_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/GEO_submissions/40S_project_Kenny/RNAseq/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-KD_C_rep2	human	RNAseq_WT_KD_rep2_R1.fastq.gz	RNAseq_WT_KD_rep2_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/GEO_submissions/40S_project_Kenny/RNAseq/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
-KD_C_rep3	human	RNAseq_WT_KD_rep3_R1.fastq.gz	RNAseq_WT_KD_rep3_R2.fastq.gz	/home/blencowe/blencowe4/krebelo/GEO_submissions/40S_project_Kenny/RNAseq/	/home/blencowe/blencowe4/krebelo/test_tmp/snakemake/RNAseq_pre_processing_stage5/processed/	yes
+control_rep1	human	Control_rep1_R1.fastq.gz	Control_rep1_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	yes
+control_rep2	human	Control_rep2_R1.fastq.gz	Control_rep2_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	yes
+control_rep3	human	Control_rep3_R1.fastq.gz	Control_rep3_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	no
+treated_rep1	human	Treated_rep1_R1.fastq.gz	Treated_rep1_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	yes
+treated_rep2	human	Treated_rep2_R1.fastq.gz	Treated_rep2_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	no
+treated_rep3	human	Treated_rep3_R1.fastq.gz	Treated_rep3_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	no
+rescue_rep1	human	Rescue_rep1_R1.fastq.gz	Rescue_rep1_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	no
+rescue_rep2	human	Rescue_rep2_R1.fastq.gz	Rescue_rep2_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	no
+rescue_rep3	human	Rescue_rep3_R1.fastq.gz	Rescue_rep3_R2.fastq.gz	/path/to/raw_data/project_A	/path/to/project/results/processed	no
+single_end_example	human	SingleEnd_sample.fastq.gz		/path/to/raw_data/project_B	/path/to/project/results/processed_single	yes
+sra_paired_example	human	SRR1039508			/path/to/project/results/processed_sra	no
+mouse_example	mouse	Mouse_sample_R1.fastq.gz	Mouse_sample_R2.fastq.gz	/path/to/raw_data/project_C	/path/to/project/results/processed_mouse	yes

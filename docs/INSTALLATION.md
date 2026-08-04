@@ -116,49 +116,109 @@ Two constraints worth knowing before you build indices:
 
 ## Cluster profile
 
-The workflow contains no scheduler-specific code. Cluster behaviour comes from
-a Snakemake profile, typically at `~/.config/snakemake/<profile-name>/`:
+The workflow contains no scheduler-specific code — everything cluster-related
+lives in a Snakemake profile. A working PBS/Torque profile is shipped in
+`profiles/pbs-torque/`, documented in
+[profiles/pbs-torque/README.md](../profiles/pbs-torque/README.md).
+
+Running on a single machine? Skip this section entirely and use
+`snakemake --use-conda --cores N`.
+
+### Install
+
+```bash
+mkdir -p ~/.config/snakemake
+cp -r profiles/pbs-torque ~/.config/snakemake/
+
+chmod +x ~/.config/snakemake/pbs-torque/pbs-submit.py \
+         ~/.config/snakemake/pbs-torque/pbs-status.py \
+         ~/.config/snakemake/pbs-torque/pbs-jobscript.sh
+```
+
+Profiles are looked up by name under `~/.config/snakemake/`, which is why this
+is copied rather than used from the repository. The execute bit matters:
+Snakemake invokes the two Python scripts as commands, not via
+`python <script>`.
+
+### The one required edit
+
+`pbs-jobscript.sh` ships with a placeholder:
+
+```sh
+source /path/to/your/conda/etc/profile.d/conda.sh
+conda activate snakemake
+```
+
+Replace the path with the output of `conda info --base` for the conda
+installation that owns your environments, and the environment name if yours is
+not called `snakemake`.
+
+This is not optional. A job launched by the scheduler starts in a fresh shell
+that does not inherit your interactive environment, so without these lines
+every job fails with `command not found` for tools that are plainly installed.
+A cluster often has a system-wide conda alongside your own and the two are not
+interchangeable — using the wrong one produces "environment not found" even
+though `conda env list` shows it.
+
+The environment activated here holds **Snakemake itself**; the per-rule tool
+environments are activated by Snakemake.
+
+### What the profile contains
 
 ```
-<profile-name>/
-├── config.yaml          # cluster command, resources, job limits
-├── pbs-submit.py        # builds and issues qsub
+profiles/pbs-torque/
+├── config.yaml          # cluster command, job limits, resources
+├── pbs-submit.py        # builds and issues qsub; sends scheduler logs to logs/cluster/
 ├── pbs-status.py        # reports job state back to Snakemake
-└── pbs-jobscript.sh     # template wrapping each job
+├── pbs-jobscript.sh     # per-job wrapper  ← must be edited
+└── README.md
 ```
 
-Settings that matter:
+Settings worth understanding before changing them:
 
 ```yaml
 jobs: 30                 # max concurrent cluster jobs
 latency-wait: 120        # seconds to wait for outputs on a shared filesystem
 retries: 2               # retry a failed job before giving up
-keep-going: true
-use-conda: true
 conda-frontend: mamba
-rerun-incomplete: true
-conda-prefix: /path/to/shared/envs   # optional: reuse envs across directories
+# conda-prefix: /path/to/shared/envs   # reuse envs across project directories
 ```
 
-`latency-wait` and `retries` are worth setting generously. On a busy shared
-filesystem the default 5-second wait is not enough for an output written on a
-compute node to become visible to the master process, and a single spurious
-failure with `retries: 0` takes down an otherwise complete run.
+`latency-wait` and `retries` both address the same problem. A job's output is
+written on a compute node and has to become visible to the master process; on a
+busy shared filesystem the 5-second default is not enough, and Snakemake
+reports `completed successfully, but some output files are missing` for jobs
+that in fact worked. With `retries: 0`, one such event ends a run that may be
+nearly complete.
 
-**The compute-node jobscript must activate conda itself.** A job launched by
-the scheduler gets a fresh shell that does not inherit your interactive
-environment, so `pbs-jobscript.sh` needs:
+`conda-prefix` is worth setting if you run the pipeline from more than one
+directory. Snakemake hashes the environment path into the environment's
+identity, so without it every new project directory rebuilds all three
+environments from scratch.
 
-```sh
-#!/bin/sh
-# properties = {properties}
-source /path/to/conda/etc/profile.d/conda.sh
-conda activate snakemake
-{exec_job}
+### Resource split
+
+Deliberately divided so the two halves cannot contradict each other:
+
+| Setting | Where | Why |
+|---|---|---|
+| `mem_mb`, `threads`, `runtime` | `config_RNAseq_pipeline.yaml` | Properties of the analysis |
+| `disk_mb` | profile's `set-resources` | Scheduler concern; not set by the pipeline |
+
+The profile's `cluster:` line passes `mem` and `walltime` only. CPU count is
+**not** passed there — `pbs-submit.py` derives `nodes=1:ppn=<threads>` from each
+rule's `threads` itself, and sending both gives PBS a contradictory request:
+
+```
+qsub: Illegal attribute or resource value
 ```
 
-Without this, jobs fail with `command not found` for tools that are plainly
-installed.
+### Another scheduler
+
+Replace the profile directory. Snakemake maintains profiles for SLURM, SGE and
+LSF at <https://github.com/snakemake-profiles>. The only pipeline-aware part of
+the shipped profile is its `set-resources` block, which names rules — copy
+those lines into whichever profile you adopt.
 
 ## Verifying the install
 
@@ -167,10 +227,10 @@ conda activate snakemake
 snakemake --version
 
 # build the environments without running any analysis
-snakemake --profile <your-profile> --use-conda --conda-create-envs-only
+snakemake --profile pbs-torque --use-conda --conda-create-envs-only
 
 # confirm the DAG resolves against your sample sheet
-snakemake --profile <your-profile> --use-conda -n
+snakemake --profile pbs-torque --use-conda -n
 ```
 
 Building the environments separately is worth the few extra minutes: a solver
