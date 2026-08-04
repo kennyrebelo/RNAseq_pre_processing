@@ -32,11 +32,11 @@ The master process dispatches one scheduler job per rule instance, so it needs
 to stay alive for the duration of the run. Submit it as a job itself, or run it
 under `tmux`/`screen`.
 
-Submitting the master as a PBS job, with generous wall time and memory since it
+Submitting the master as a PBS job, with generous wall time since it
 supervises everything:
 
 ```bash
-submitjob -n skm -m 100 -w 100 snakemake --profile <profile> --use-conda
+submitjob -n skm -w 100 snakemake --profile <profile> --use-conda
 ```
 
 Or wrap it, which avoids re-typing the flags and guarantees the right conda
