@@ -1,4 +1,4 @@
-# RNA-seq Pre-processing, Expression and Splicing Pipeline
+# RNA-seq pre-processing, expression and splicing pipeline
 
 A Snakemake workflow that takes raw RNA-seq reads (local FASTQs or SRA
 accessions) through trimming, alignment, transcript quantification, QC, and
