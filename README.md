@@ -46,8 +46,8 @@ requires one species — see [Configuration](docs/CONFIGURATION.md)).
 
 ```bash
 # 1. clone
-git clone https://github.com/<user>/<repo>.git
-cd <repo>
+git clone https://github.com/kennyrebelo/RNAseq_pre_processing.git
+cd RNAseq_pre_processing
 
 # 2. environment holding Snakemake itself
 conda create -n snakemake -c conda-forge -c bioconda snakemake mamba
