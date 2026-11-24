@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 862" width="1792" height="862">
+<rect width="1792" height="862" fill="#ffffff"/>
+<text x="48.0" y="56.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#1f2328" text-anchor="start">RNA-seq pre-processing, expression and splicing</text>
+<text x="48.0" y="84.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#59636e" text-anchor="start">Snakemake  ·  FASTQ or SRA in, tracks / DE tables / splicing quantification</text>
+<path d="M232.0,443.0 L232.0,658.0 Q232.0,680.0 254.0,680.0 L650.0,680.0" fill="none" stroke="#CC79A7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M112.0,430.0 L561.2,430.0 Q583.2,430.0 598.8,445.6 L687.7,534.4 Q703.2,550.0 725.2,550.0 L895.9,550.0" fill="none" stroke="#0072B2" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M112.0,420.0 L561.2,420.0 Q583.2,420.0 598.8,404.4 L697.7,305.6 Q713.2,290.0 735.2,290.0 L1504.3,290.0" fill="none" stroke="#E69F00" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M112.0,410.0 L561.2,410.0 Q583.2,410.0 598.8,394.4 L817.7,175.6 Q833.2,160.0 855.2,160.0 L1419.4,160.0" fill="none" stroke="#009E73" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M908.6,277.3 L945.3,240.6 Q960.9,225.0 982.9,225.0 L1028.9,225.0 Q1050.9,225.0 1066.5,209.4 L1103.2,172.7" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M895.9,290.0 L945.3,240.6 Q960.9,225.0 982.9,225.0 L1028.9,225.0 Q1050.9,225.0 1066.5,209.4 L1115.9,160.0" fill="none" stroke="#E69F00" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="219.0" y="397.0" width="26" height="46.0" rx="13.0" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="232.0" y="376.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Trim + FastQC</text>
+<text x="232.0" y="393.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">Trim Galore</text>
+<rect x="369.0" y="397.0" width="26" height="46.0" rx="13.0" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="382.0" y="466.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Align</text>
+<text x="382.0" y="483.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">STAR</text>
+<rect x="519.0" y="397.0" width="26" height="46.0" rx="13.0" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="532.0" y="466.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Unique-read BAM</text>
+<text x="532.0" y="483.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">samtools</text>
+<circle cx="895.9" cy="160.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="895.9" y="126.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Count mapped reads</text>
+<text x="895.9" y="143.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">samtools</text>
+<circle cx="1115.9" cy="160.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="1115.9" y="126.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Split by strand</text>
+<text x="1115.9" y="143.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">pysam</text>
+<circle cx="1269.8" cy="160.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="1269.8" y="126.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Normalised coverage</text>
+<text x="1269.8" y="143.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">bedGraphToBigWig</text>
+<circle cx="1419.4" cy="160.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="1419.4" y="126.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">UCSC track hub</text>
+<circle cx="895.9" cy="290.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="895.9" y="326.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Strandedness</text>
+<text x="895.9" y="343.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">RSeQC</text>
+<circle cx="1020.9" cy="290.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="1020.9" y="256.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Assemble</text>
+<text x="1020.9" y="273.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">StringTie</text>
+<circle cx="1153.0" cy="290.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="1153.0" y="256.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Merge + name isoforms</text>
+<text x="1153.0" y="273.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">StringTie --merge</text>
+<circle cx="1324.3" cy="290.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="1324.3" y="256.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Quantify splicing</text>
+<text x="1324.3" y="273.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">rMATS</text>
+<circle cx="1504.3" cy="290.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="1504.3" y="256.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Filter + annotate exons</text>
+<circle cx="895.9" cy="550.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="895.9" y="586.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Aggregate QC report</text>
+<text x="895.9" y="603.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">MultiQC</text>
+<circle cx="457.0" cy="680.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="457.0" y="716.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Quantify transcripts</text>
+<text x="457.0" y="733.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">Salmon</text>
+<circle cx="650.0" cy="680.0" r="11" fill="#ffffff" stroke="#1f2328" stroke-width="3.2"/>
+<text x="650.0" y="716.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Differential expression</text>
+<text x="650.0" y="733.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">DESeq2</text>
+<path d="M47.0,391.0 H80.0 L93.0,404.0 V449.0 H47.0 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M80.0,391.0 V404.0 H93.0" fill="none" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<rect x="42.0" y="418.0" width="56.0" height="18" rx="3" fill="#57606a"/>
+<text x="70.0" y="432.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">FASTQ</text>
+<text x="70.0" y="362.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2328" text-anchor="middle">Input</text>
+<text x="70.0" y="378.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="middle">FASTQ or SRA</text>
+<path d="M521.7,400.5 L484.0,365.8" fill="none" stroke="#8c959f" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
+<path d="M434.0,312.0 H467.0 L480.0,325.0 V370.0 H434.0 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M467.0,312.0 V325.0 H480.0" fill="none" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<rect x="429.0" y="339.0" width="56.0" height="18" rx="3" fill="#E69F00"/>
+<text x="457.0" y="353.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">BAM</text>
+<text x="423.0" y="345.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="end">Unique</text>
+<text x="423.0" y="361.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="end">alignments</text>
+<path d="M1432.4,160.0 L1492.4,160.0" fill="none" stroke="#8c959f" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
+<path d="M1496.4,131.0 H1529.4 L1542.4,144.0 V189.0 H1496.4 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M1529.4,131.0 V144.0 H1542.4" fill="none" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<rect x="1491.4" y="158.0" width="56.0" height="18" rx="3" fill="#009E73"/>
+<text x="1519.4" y="172.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">bw</text>
+<text x="1553.4" y="156.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="start">Stranded</text>
+<text x="1553.4" y="172.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="start">coverage tracks</text>
+<path d="M1517.3,290.0 L1577.3,290.0" fill="none" stroke="#8c959f" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
+<path d="M1581.3,261.0 H1614.3 L1627.3,274.0 V319.0 H1581.3 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M1614.3,261.0 V274.0 H1627.3" fill="none" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<rect x="1576.3" y="288.0" width="56.0" height="18" rx="3" fill="#E69F00"/>
+<text x="1604.3" y="302.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">tsv</text>
+<text x="1638.3" y="286.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="start">Cryptic /</text>
+<text x="1638.3" y="302.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="start">annotated events</text>
+<path d="M908.9,550.0 L1018.9,550.0" fill="none" stroke="#8c959f" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
+<path d="M1022.9,521.0 H1055.9 L1068.9,534.0 V579.0 H1022.9 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M1055.9,521.0 V534.0 H1068.9" fill="none" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<rect x="1017.9" y="548.0" width="56.0" height="18" rx="3" fill="#0072B2"/>
+<text x="1045.9" y="562.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">html</text>
+<text x="1079.9" y="546.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="start">multiqc_report</text>
+<path d="M663.0,680.0 L773.0,680.0" fill="none" stroke="#8c959f" stroke-width="2" stroke-dasharray="2 4" stroke-linecap="round"/>
+<path d="M777.0,651.0 H810.0 L823.0,664.0 V709.0 H777.0 Z" fill="#ffffff" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M810.0,651.0 V664.0 H823.0" fill="none" stroke="#1f2328" stroke-width="2.2" stroke-linejoin="round"/>
+<rect x="772.0" y="678.0" width="56.0" height="18" rx="3" fill="#CC79A7"/>
+<text x="800.0" y="692.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">tsv</text>
+<text x="834.0" y="676.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="start">DE genes</text>
+<text x="834.0" y="692.0" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="start">+ PCA</text>
+<line x1="48" y1="761.8" x2="1744.3" y2="761.8" stroke="#d0d7de" stroke-width="1.5"/>
+<line x1="48" y1="797.8" x2="94" y2="797.8" stroke="#009E73" stroke-width="7" stroke-linecap="round"/>
+<text x="106.0" y="802.8" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start">Genome browser  (generate_bw)</text>
+<line x1="351.18" y1="797.8" x2="397.18" y2="797.8" stroke="#E69F00" stroke-width="7" stroke-linecap="round"/>
+<text x="409.2" y="802.8" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start">Splicing  (splicing.enabled)</text>
+<line x1="646.94" y1="797.8" x2="692.94" y2="797.8" stroke="#0072B2" stroke-width="7" stroke-linecap="round"/>
+<text x="704.9" y="802.8" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start">Quality control</text>
+<line x1="846.24" y1="797.8" x2="892.24" y2="797.8" stroke="#CC79A7" stroke-width="7" stroke-linecap="round"/>
+<text x="904.2" y="802.8" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start">Expression  (dge.enabled)</text>
+<circle cx="1129.74" cy="797.8" r="9" fill="#ffffff" stroke="#1f2328" stroke-width="3"/>
+<text x="1146.7" y="802.8" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#1f2328" text-anchor="start">Step</text>
+<text x="48.0" y="831.8" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#59636e" text-anchor="start">Strandedness is inferred once per sample and shared by the splicing and genome-browser lines.</text>
+</svg>
