@@ -1,4 +1,4 @@
-# RNA-seq Pre-processing, differential gene expression and splicing quantification pipeline
+# RNA-seq pre-processing, differential gene expression and splicing quantification pipeline
 
 A Snakemake workflow that takes raw RNA-seq reads (local FASTQs or SRA
 accessions) through trimming, alignment, transcript quantification, QC, and
