@@ -9,7 +9,7 @@ Built for a PBS/Torque HPC cluster, but the workflow itself is
 scheduler-agnostic — cluster specifics live entirely in a Snakemake profile.
 
 <p align="center">
-  <img src="docs/images/pipeline_rulegraph.svg" alt="Pipeline rule graph" width="700">
+  <img src="docs/images/pipeline_subway3.svg" alt="Pipeline rule graph" width="700">
 </p>
 
 ---
