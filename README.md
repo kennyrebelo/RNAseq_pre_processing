@@ -1,4 +1,4 @@
-# RNA-seq pre-processing, expression and splicing pipeline
+# RNA-seq Pre-processing, Expression and Splicing Pipeline
 
 A Snakemake workflow that takes raw RNA-seq reads (local FASTQs or SRA
 accessions) through trimming, alignment, transcript quantification, QC, and
@@ -46,28 +46,36 @@ requires one species — see [Configuration](docs/CONFIGURATION.md)).
 
 ```bash
 # 1. clone
-git clone https://github.com/kennyrebelo/RNAseq_pre_processing.git
-cd RNAseq_pre_processing
+git clone https://github.com/<user>/<repo>.git
+cd <repo>
 
 # 2. environment holding Snakemake itself
-conda create -n snakemake -c conda-forge -c bioconda snakemake mamba
+#    NOTE: the pipeline requires Snakemake 7.18.1. Installing Snakemake
+#    unpinned will give you 8.x or later, whose profile format, cluster
+#    submission interface and conda handling are incompatible with this
+#    workflow. Use the pinned environment file:
+conda env create -f environment_snakemake.yaml
 conda activate snakemake
 
-# 3. describe your data
+# 3. verify before going further
+snakemake --version        # must print 7.18.1
+python -c "import pandas"  # must not error
+
+# 4. describe your data
 #    edit samples.tsv, experimental_design.tsv, config_RNAseq_pipeline.yaml
 #    (the versions shipped here are annotated templates with
 #     /path/to/... placeholders and one example of every input type)
 
-# 4. install the cluster profile, if running on PBS/Torque
+# 5. install the cluster profile, if running on PBS/Torque
 cp -r profiles/pbs-torque ~/.config/snakemake/
 chmod +x ~/.config/snakemake/pbs-torque/{pbs-submit.py,pbs-status.py,pbs-jobscript.sh}
 #    then edit the conda path at the top of pbs-jobscript.sh -- see
 #    profiles/pbs-torque/README.md
 
-# 5. check the plan without running anything
+# 6. check the plan without running anything
 snakemake --profile pbs-torque --use-conda -n
 
-# 6. run
+# 7. run
 snakemake --profile pbs-torque --use-conda
 ```
 
@@ -78,7 +86,9 @@ SLURM, SGE or LSF.
 
 The three tool environments (`environment_RNAseq.yaml`,
 `environment_DESeq2.yaml`, `environment_rMATS.yaml`) are built automatically by
-`--use-conda` on first run. Expect 15–30 minutes for that build.
+`--use-conda` on first run. Expect 15–30 minutes for that build. They are
+separate from `environment_snakemake.yaml`, which you create yourself in step 2
+and which holds no bioinformatics tools.
 
 ## Directory structure
 
@@ -93,6 +103,7 @@ The `rules/` and `scripts/` directory names are referenced by `Snakefile` and
 ├── samples.tsv                        # one row per sample
 ├── experimental_design.tsv            # group + contrast definitions
 │
+├── environment_snakemake.yaml         # Snakemake itself — PINNED, see Quick start
 ├── environment_RNAseq.yaml            # main toolchain
 ├── environment_DESeq2.yaml            # R / Bioconductor, DGE only
 ├── environment_rMATS.yaml             # StringTie + rMATS, splicing only
@@ -158,9 +169,20 @@ Generated at runtime (not tracked in git):
 
 ## Design notes
 
-**Three separate conda environments.** The R/Bioconductor stack and the
-StringTie/rMATS stack are isolated from the main toolchain so that changing one
-does not force the solver to re-resolve the others. Each pins
+**The Snakemake environment is pinned, and the cluster depends on it.**
+`environment_snakemake.yaml` pins Snakemake to 7.18.1. Beyond Snakemake itself,
+`pandas` is a hard requirement of this environment rather than a convenience:
+`rules/common.smk` parses the sample sheet with it, and `pbs-jobscript.sh`
+activates this same environment on every compute node, where each job re-reads
+the workflow before running its rule. Anything imported at workflow-parse time
+must therefore be present here, not only in the tool environments built by
+`--use-conda`. The same coupling means a workflow file edited on the login node
+must be visible to the compute nodes — a worker that reads a stale copy will
+fail at DAG build with an error that looks nothing like a rule failure.
+
+**Three separate conda environments for the tools.** The R/Bioconductor stack
+and the StringTie/rMATS stack are isolated from the main toolchain so that
+changing one does not force the solver to re-resolve the others. Each pins
 `sysroot_linux-64=2.17` to keep the solver on builds that run against older
 cluster glibc, and uses `nodefaults` to keep stale `pkgs/main` and `pkgs/r`
 builds out of the solve.
@@ -173,7 +195,7 @@ flips every junction's strand assignment.
 
 **Checkpoints where output is unknown ahead of time.** SRA downloads may
 produce one or two FASTQs, and strandedness is only known after alignment. Both
-are Snakemake `checkpoints`, so the DAG is re-evaluated once they complete.
+are Snakemake `checkpoint`s, so the DAG is re-evaluated once they complete.
 
 **Failure is loud.** Every rule writes a `log:`, which survives job failure even
 though Snakemake deletes failed outputs. Sample sheet and design file problems
