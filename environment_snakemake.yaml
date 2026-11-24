@@ -1,0 +1,12 @@
+name: snakemake
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.10
+  - snakemake-minimal=7.18.1
+  - mamba=0.25
+  - pandas=1.4
+  - pulp=2.7
+  - coincbc=2.10
