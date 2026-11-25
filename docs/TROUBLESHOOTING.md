@@ -54,6 +54,21 @@ Use the path from `conda info --base` for the conda installation that owns your
 environments — a cluster often has a system-wide install as well, and they are
 not interchangeable.
 
+### `ModuleNotFoundError: No module named 'pandas'` at DAG building
+
+The environment holding Snakemake is missing pandas. `rules/common.smk` imports
+it to parse the sample sheet, so this fails before any rule runs.
+
+It appears in two places. On the login node it means the environment was built
+by hand rather than from `environment_snakemake.yaml`. On a compute node it
+means `pbs-jobscript.sh` is activating a *different* environment from the one
+the master process uses — every cluster job re-reads the workflow and rebuilds
+the DAG, so it needs pandas too.
+
+```bash
+conda env update -f environment_snakemake.yaml
+```
+
 ### `version 'GLIBC_2.xx' not found`
 
 A conda package was built against a newer glibc than the compute nodes provide.
@@ -96,7 +111,9 @@ Versions should share one `r44_*` build generation.
 
 The `defaults` channels are in the solve. Channels in an environment file are
 merged with `~/.condarc`, not substituted — `nodefaults` is required in the
-channel list, which all three environment files have.
+channel list. The Snakemake, DESeq2 and rMATS environment files have it;
+`environment_RNAseq.yaml` still lists `defaults`, so it is the one most likely
+to hit this.
 
 To remove the risk globally: `conda config --remove channels defaults`.
 
