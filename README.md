@@ -213,3 +213,9 @@ are caught at DAG-build time rather than mid-run on a compute node.
 If you use this pipeline, please cite the underlying tools: Snakemake,
 Trim Galore, Cutadapt, FastQC, STAR, Salmon, samtools, MultiQC, RSeQC,
 bedtools, DESeq2, tximport, StringTie, and rMATS.
+
+## Development note
+
+The workflow files, helper scripts and repository structure in this project were
+drafted with the assistance of AI (Anthropic's Claude), then tested, debugged and
+validated against real datasets on the target HPC cluster by the author.
