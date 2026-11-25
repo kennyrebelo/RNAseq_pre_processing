@@ -13,7 +13,7 @@ authors:
     given-names: Kenny
     affiliation: "Donnelly Centre, University of Toronto"
     orcid: "https://orcid.org/0000-0002-5852-8524"
-version: 1.0.0
+version: 1.0.1
 date-released: 2026-11-25
 license: MIT
 doi: "10.5281/zenodo.24539281"
