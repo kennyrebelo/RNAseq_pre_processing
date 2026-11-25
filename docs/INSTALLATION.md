@@ -9,27 +9,51 @@
 | Linux x86-64 | glibc 2.17 or newer; the environments pin `sysroot_linux-64=2.17` for this reason |
 | conda or miniconda | Any recent version. `mamba` is strongly recommended as the solver |
 | Job scheduler (optional) | PBS/Torque, SLURM, SGE — via a Snakemake profile. The workflow also runs on a single machine |
-| Disk | Roughly 30–60 GB per sample for intermediates, plus ~15 GB for the three conda environments |
+| Disk | Roughly 30–60 GB per sample for intermediates, plus ~15 GB for the three tool environments |
 | Memory | 40 GB for the STAR and Salmon steps (configurable). A human STAR index needs ~32 GB resident |
 | Network | Required on first run to build conda environments, and for SRA samples |
 
 ### Software installed by you
 
-Only two things:
+One environment, built from the file shipped with the pipeline:
 
 ```bash
-conda create -n snakemake -c conda-forge -c bioconda snakemake mamba
+conda env create -f environment_snakemake.yaml
 conda activate snakemake
 ```
 
-Everything else is declared in the three environment files and built
+Everything else is declared in the three tool environments and built
 automatically by `--use-conda`.
 
-Tested with Snakemake 7.x. The workflow uses `checkpoint`, `temp()`,
-`protected()`, `directory()` and `script:` directives, all long-standing
-features.
+**Do not install Snakemake unpinned.** `conda create -n snakemake snakemake`
+resolves to 8.x or later, whose profile format, cluster-submission interface
+and conda handling are all incompatible with this workflow.
+`environment_snakemake.yaml` pins:
+
+| Package | Pinned | Why |
+|---|---|---|
+| `snakemake-minimal` | 7.18.1 | The version this pipeline is written against. `minimal` omits the remote-storage providers (S3, GCS, Dropbox), which this workflow does not use |
+| `python` | 3.10 | Leaving Python open is what lets the solver drag in a newer Snakemake |
+| `pandas` | 1.4 | `rules/common.smk` parses the sample sheet with it — see below |
+| `mamba` | 0.25 | Snakemake 7 shells out to the `mamba` CLI as its conda frontend |
+| `pulp`, `coincbc` | 2.7, 2.10 | The ILP job scheduler (the `CBC MILP Solver` banner in run logs) |
+
+`pandas` is a hard requirement of this environment rather than a convenience,
+and the reason is worth knowing before you adapt the profile: `pbs-jobscript.sh`
+activates this same environment on **every compute node**, where each job
+re-reads the whole workflow and rebuilds the DAG before running its one rule.
+Anything imported at workflow-parse time has to be present here, not only in
+the tool environments. The same coupling means a `.smk` file edited on the
+login node must be visible to the compute nodes — a worker reading a stale copy
+fails at DAG build with an error that looks nothing like a rule failure.
+
+The workflow uses `checkpoint`, `temp()`, `protected()`, `directory()` and
+`script:` directives.
 
 ### Software installed automatically
+
+Three tool environments, built by `--use-conda` on first run and never
+installed by hand.
 
 **`environment_RNAseq.yaml`** — the main toolchain:
 
@@ -69,7 +93,8 @@ rMATS is pinned because `scripts/filter_se_events.py` assumes the 4.3.0
 
 ### Why `nodefaults` matters
 
-All three environment files list:
+`environment_snakemake.yaml`, `environment_DESeq2.yaml` and
+`environment_rMATS.yaml` list:
 
 ```yaml
 channels:
@@ -88,6 +113,13 @@ producing:
 ```
 object 'colMeans' is not exported by 'namespace:MatrixGenerics'
 ```
+
+`environment_RNAseq.yaml` still lists `defaults` rather than `nodefaults`. That
+environment solves and runs, so this is not an outstanding bug, but it leaves
+`pkgs/main` eligible and the solve less reproducible than the other three. If
+you change it, expect the environment's hash to change and the whole main
+toolchain to rebuild on the next run, with no guarantee the new solve picks the
+same builds.
 
 ## Reference data
 
@@ -224,7 +256,8 @@ those lines into whichever profile you adopt.
 
 ```bash
 conda activate snakemake
-snakemake --version
+snakemake --version        # must print 7.18.1
+python -c "import pandas"  # must not error
 
 # build the environments without running any analysis
 snakemake --profile pbs-torque --use-conda --conda-create-envs-only
