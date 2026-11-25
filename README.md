@@ -1,5 +1,8 @@
 # RNA-seq pre-processing, differential gene expression and splicing quantification pipeline
 
+[![Release](https://img.shields.io/github/v/release/kennyrebelo/RNAseq_pre_processing)](https://github.com/kennyrebelo/RNAseq_pre_processing/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A Snakemake workflow that takes raw RNA-seq reads (local FASTQs or SRA
 accessions) through trimming, alignment, transcript quantification, QC, and
 optionally through genome-browser track generation, differential gene
