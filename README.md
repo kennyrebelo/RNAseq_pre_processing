@@ -14,7 +14,7 @@ scheduler-agnostic — cluster specifics live entirely in a Snakemake profile.
 
 <p align="center">
   <sub>
-    <a href="docs/images/pipeline_subway3.svg">Detailed view</a> — every rule as its own station ·
+    <a href="docs/images/pipeline_subway_detailed.svg">Detailed view</a> — every rule as its own station ·
     <a href="docs/images/pipeline_rulegraph.svg">Snakemake rulegraph</a>
   </sub>
 </p>
