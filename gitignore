@@ -1,0 +1,27 @@
+# Snakemake state, built conda environments, cluster logs
+.snakemake/
+logs/
+
+# Pipeline outputs
+processed/
+QC/
+DGE/
+splicing/
+*.bam
+*.bai
+*.bw
+*.bedgraph
+*.fq.gz
+*.fastq.gz
+
+# Local sample sheets and config, if you keep real ones beside the templates
+samples.local.tsv
+experimental_design.local.tsv
+config.local.yaml
+
+# Editor / OS noise
+.DS_Store
+*.swp
+__pycache__/
+.Rhistory
+.RData
