@@ -110,6 +110,11 @@ The `rules/` and `scripts/` directory names are referenced by `Snakefile` and
 ├── samples.tsv                        # one row per sample
 ├── experimental_design.tsv            # group + contrast definitions
 │
+├── LICENSE                            # MIT
+├── CITATION.cff                       # how to cite this pipeline
+├── CHANGELOG.md                       # what changed between versions
+├── .gitignore
+│
 ├── environment_snakemake.yaml         # Snakemake itself — PINNED, see Quick start
 ├── environment_RNAseq.yaml            # main toolchain
 ├── environment_DESeq2.yaml            # R / Bioconductor, DGE only
@@ -148,7 +153,10 @@ The `rules/` and `scripts/` directory names are referenced by `Snakefile` and
     ├── USAGE.md
     ├── OUTPUTS.md
     ├── TROUBLESHOOTING.md
-    └── images/pipeline_rulegraph.svg
+    └── images/
+        ├── pipeline_subway_compact.svg     # the map shown at the top of this file
+        ├── pipeline_subway_detailed.svg    # every rule as its own station
+        └── pipeline_rulegraph.svg          # raw `snakemake --rulegraph` output
 ```
 
 `samples.tsv`, `experimental_design.tsv` and `config_RNAseq_pipeline.yaml` ship
@@ -213,6 +221,10 @@ are caught at DAG-build time rather than mid-run on a compute node.
 If you use this pipeline, please cite the underlying tools: Snakemake,
 Trim Galore, Cutadapt, FastQC, STAR, Salmon, samtools, MultiQC, RSeQC,
 bedtools, DESeq2, tximport, StringTie, and rMATS.
+
+The subway-map figures in this repository were produced with
+[slitherFlow](https://github.com/mikemartinez99/slitherFlow) (Martinez, M.),
+which is not a dependency of the workflow itself.
 
 ## Development note
 
